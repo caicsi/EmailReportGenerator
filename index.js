@@ -7,5 +7,4 @@ $(document).ready(() => {
     dropbox.addEventListener("dragenter", dragenter, false);
     dropbox.addEventListener("dragover", dragover, false);
     dropbox.addEventListener("drop", drop, false);
-
 });
