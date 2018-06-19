@@ -5,11 +5,9 @@
  */
 function parseFiles() {
     let fileList = this.files;
-    console.log(fileList);
 
     for (let i = 0; i < fileList.length; i++) {
         let blob = fileList[i];
-        //console.log(blob);
 
         switch(blob.type) {
             case "application/zip":
@@ -33,36 +31,34 @@ function parseFiles() {
 
                 break;
             case "text/csv":
-                return CSVToJSONConverter(blob);
+                CSVToJSONConverter(blob, processData);
                 break;
             default:
+                console.log(blob.type);
                 break;
         }
     }
 }
 
 //Takes a blob of a CSV file and returns a JSON
-function CSVToJSONConverter(Blob) {
+function CSVToJSONConverter(Blob, callback) {
 
     let reader = new FileReader();
-    reader.onload = function(e) {
+
+    reader.onload = () => {
         let text = reader.result;
-        let headers = [];
         let json = [];
         let lines = text.split('\n');
 
-        let i = findHeaders(lines);
-        console.log(i);
+        lines = CSVtoArr(lines);
 
-        lines = removeBackslashes(lines, i);
-        console.log(lines);
-        headers = lines[0];
+        let headers = lines.filter(line => line.length > 1)[0];
 
         //loop through entries (proceeding the headers)
         //help from http://techslides.com/convert-csv-to-json-in-javascript
-        for (let i = 1; i < lines.length; i++) {
+        lines.filter(line => line.length > 1).slice(1).forEach(line => {
             let entry = {};
-            let line = lines[i];
+
 
             //loop through columns
             for(let j = 0; j < headers.length; j++) {
@@ -70,10 +66,11 @@ function CSVToJSONConverter(Blob) {
             }
 
             json.push(entry);
-        }
+        });
 
-        console.log(json);
-        return json;
+        json.shift();
+
+        callback(json, lines.filter(line => line.length === 1).filter(line => line[0] !== ""));
     };
 
     //set the file reader to read the contents as text
@@ -81,44 +78,31 @@ function CSVToJSONConverter(Blob) {
 
 }
 
-//find headers in an array of lines of CSV. returns index of headers
-function findHeaders(lines) {
-
-    //find headers- usually the 5th element, but just in case.
-    for (let i = 0; i < lines.length; i++) {
-
-        if (lines[i].includes(",") && lines[i].split(",").length > 2) {
-            return i;
-        }
-    }
-
-    return -1;
+function processData(data, metadata) {
+    console.log(metadata);
+    console.log(data)
 }
 
-//takes an array of lines (from CSV) and removes any /", as well as the lines before the headers.
+//takes an array of lines (from CSV) and removes any \", as well as the lines before the headers.
 //returns the new 2D array without those characters, and the first element is the headers.
-function removeBackslashes(lines, index) {
+function CSVtoArr(lines) {
 
-    let newLines = [];
+    let inQuote = false;
 
-    //the text read in needs to be reformatted. Right now, if an entry is one word, it
-    // has no \" surrounding it. But if it's multiple words, it does.
-    //loop through all entries starting with the header and reformat them
-    for (let k = index; k < lines.length; k++) {
-        let row = lines[k];
+    return lines.map(row => {
+        return row.split('')
+            .map(char => {
+                if (char === '"') {
+                    inQuote = !inQuote;
+                }
+                else if (char === ',' && !inQuote) {
+                    return '|';
+                }
 
-        let entries = row.split(",");
-        for (let l = 0; l < entries.length; l++) {
-            while (entries[l][0] === "\"" && entries[l][entries[l].length - 1] !== "\"") {
-                entries[l] = entries[l] + ',' + entries[l + 1];
-                entries.splice(l + 1, 1);
-            }
-
-            entries[l] = entries[l].replace(/\"/g, "");
-        }
-
-        newLines[k - index] = entries;
-    }
-
-    return newLines;
+                return char;
+            })
+            .join('')
+            .replace(/\"/g, "")
+            .split('|');
+    })
 }
