@@ -1,5 +1,3 @@
-import * as JSZip from "jszip";
-
 function parseFiles() {
     let fileList = this.files;
 
