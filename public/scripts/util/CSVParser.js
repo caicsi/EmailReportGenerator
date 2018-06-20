@@ -1,8 +1,5 @@
-//var JSZip = require("jszip");
+import * as JSZip from "jszip";
 
-/*
-    parseFiles: event listener function for input button onchange
- */
 function parseFiles() {
     let fileList = this.files;
 
@@ -11,23 +8,13 @@ function parseFiles() {
 
         switch(blob.type) {
             case "application/zip":
-                new JSZip.external.Promise(function (resolve, reject) {
-                   JSZipUtils.getBinaryContent(blob, (err, data) => {
-                       if (err) {
-                           console.log(data);
-                           reject(err);
-                       } else {
-                           resolve(data);
-                       }
-                   });
-                }).then(data => {
-                    console.log("here");
-                    return JSZip.loadAsync(data)
-                }).then(function success(zip) {
-                    console.log("success", zip.files)
-                }, function failure(e) {
-                    console.error("failure\n", e)
-                });
+                let new_zip = new JSZip();
+                // more files !
+                new_zip.loadAsync(content)
+                    .then(function(zip) {
+                        // you now have every files contained in the loaded zip
+                        new_zip.file("clicks.csv").async("string").then(text => console.log(text)); // a promise of "Hello World\n"
+                    });
 
                 break;
             case "text/csv":
@@ -56,7 +43,9 @@ function CSVToJSONConverter(Blob, callback) {
 
         //loop through entries (proceeding the headers)
         //help from http://techslides.com/convert-csv-to-json-in-javascript
-        lines.filter(line => line.length > 1).slice(1).forEach(line => {
+        lines.filter(line => line.length > 1)
+            .slice(1)
+            .forEach(line => {
             let entry = {};
 
 
@@ -70,7 +59,7 @@ function CSVToJSONConverter(Blob, callback) {
 
         json.shift();
 
-        callback(json, lines.filter(line => line.length === 1).filter(line => line[0] !== ""));
+        callback(json, lines.filter(line => line.length === 1 && line[0] !== ""));
     };
 
     //set the file reader to read the contents as text
@@ -83,8 +72,11 @@ function processData(data, metadata) {
     console.log(data)
 }
 
-//takes an array of lines (from CSV) and removes any \", as well as the lines before the headers.
-//returns the new 2D array without those characters, and the first element is the headers.
+/*
+Pre: Takes in an array of lines from a CSV file
+Post: Returns a 2D array where the second dimension is the rows of the csv split into individual values
+Purpose: To convert CSV rows into an array while maintaining non-delimiter comma values and removing excess quotes
+ */
 function CSVtoArr(lines) {
 
     let inQuote = false;

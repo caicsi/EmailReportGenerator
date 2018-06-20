@@ -1,4 +1,4 @@
-$(document).ready(() => {
+document.addEventListener("DOMContentLoaded", () => {
     let inputElement = document.getElementById('file-input');
     inputElement.addEventListener("change", parseFiles, false);
     inputElement.innerHTML = "";
