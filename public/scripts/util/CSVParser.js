@@ -39,7 +39,8 @@ function CSVToJSONConverter(Blob, callback) {
 
         let headers = lines.filter(line => line.length > 1)[0];
 
-        //check if the CSV is the overview; headers will be different
+        //check if the CSV is the overview; headers will be different.
+        //detected by seeing if the very first line has more than one column
         if (headers === lines[0]) {
             json = OverviewCSVtoJSON(lines, json);
         }
@@ -90,7 +91,8 @@ function OverviewCSVtoJSON(lines, json) {
         //check if line is just a header
         if (lines[i].length === 1 && lines[i][0].length > 2) {
             let subJson = {};
-            for (let j = i + 1; j < lines.length; j++) {
+            let j = i + 1;
+            for (; j < lines.length; j++) {
                 if (lines[j].length === 1){
                     break;
                 }
@@ -98,15 +100,17 @@ function OverviewCSVtoJSON(lines, json) {
                 lines[j] = "";
             }
             entry[lines[i]] = subJson;
-
-            json.push(entry); //move to below if/else if we want to see the gaps in the CSV file
+            i = j - 1;
+            //json.push(entry); //move to below if/else if we want to see the gaps in the CSV file
         }
         //otherwise, proceed to make json entry as normal
         else if (lines[i].length > 1) {
             entry[lines[i][0]] = lines[i][1];
 
-            json.push(entry); //move to below if/else if we want to see the gaps in the CSV file
+            //json.push(entry); //move to below if/else if we want to see the gaps in the CSV file
         }
+
+        json.push(entry);
     }
 
     //console.log(json);
@@ -135,7 +139,9 @@ function createOverviewEntry(line) {
 
 function processData(data, metadata) {
     console.log(metadata);
-    console.log(data)
+    console.log(data);
+
+    generateReport(data);
 }
 
 /*

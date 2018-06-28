@@ -3,6 +3,13 @@ extends layout
 block content
   div#drop-box
     input#file-input(type="file" multiple="")
+  div#emails
+    div(class="email emailbuttons")
+        button("v-for"="campaign in campaigns", "v-bind:key"="campaign", "v-bind:class"="['email-button', { active: currentEmail === campaign }]", "v-on:click"="viewReport") {{ campaign }}
+    div(class="email emailreport")
+        div("v-for"="line in currentEmail", "v-bind:key"="line[0]")
   script(type="text/javascript" src="scripts/util/dropZone.js")
   script(type="text/javascript" src="scripts/util/CSVParser.js")
   script(type="text/javascript" src="scripts/index.js")
+  script(type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js")
+  script(type="text/javascript" src="scripts/util/vueScripts.js")
