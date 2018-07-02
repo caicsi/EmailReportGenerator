@@ -17,31 +17,24 @@ Vue.component('tab-archive', {
 let emailReport = new Vue({
     el: '#emails',
     data: {
-        currentEmail: [],
         campaigns: ["Placeholder"],
-        report: [{"Placeholder":"Choose an email to see more info"}]
-    },
-    methods: {
-        viewReport: function(campaign) {
-            this.currentEmail = this.report[0][campaign];
-        }
+        currentCampaign: "",
+        report: {"Placeholder": { "Choose an email to see more info" : "Example data" } }
     }
-})
+});
 
 function generateReport(data) {
 
-    emailReport.campaigns.push(data[0]["Campaign"]);
-    console.log(data[0]);
     let content = {};
     data.forEach(line => {
-        content[line[0]] = content[line[1]];
+        for (let key in line) {
+            content[key] = line[key];
+        }
     });
 
-    let file = {};
-    file[data[0]["Campaign"]] = content;
-    emailReport.report.push(file);
-    //emailReport.report.push(data);
-    //emailReport.campaigns.push
+    //console.log(content);
+    emailReport.report[data[0]["Campaign"]] = content;
+    emailReport.campaigns.push(data[0]["Campaign"]);
 
     console.log(emailReport.report);
 }
