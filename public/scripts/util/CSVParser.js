@@ -81,7 +81,7 @@ function OverviewCSVtoJSON(lines, json) {
     for (let i = 0; i < lines.length; i++) {
         let entry = {};
 
-        //remove colons
+        //remove colons that are at the end of the string
         for(let k = 0; k < lines[i].length; k++) {
             if (lines[i][k][lines[i][k].length - 1] === ":") {
                 lines[i][k] = lines[i][k].substring(0, lines[i][k].length - 1);
@@ -113,28 +113,7 @@ function OverviewCSVtoJSON(lines, json) {
         json.push(entry);
     }
 
-    //console.log(json);
-
     return json;
-}
-
-//mini-function to be called in OverviewCSVtoJSON, separated so it can be recursive if need be.
-function createOverviewEntry(line) {
-
-    let entry = {};
-
-    //check if line is just a header
-    if (line.length === 1) {
-        let subJson = createOverviewEntry(line);
-        entry[line[0]] = subJson;
-    }
-    //otherwise, proceed to make json entry
-    else if (line.length > 1) {
-        entry[line[0]] = entry[line[1]];
-    }
-
-    return entry;
-
 }
 
 function processData(data, metadata) {

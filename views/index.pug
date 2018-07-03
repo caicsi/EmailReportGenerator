@@ -3,18 +3,24 @@ extends layout
 block content
   div#drop-box
     input#file-input(type="file" multiple="")
-  div#emails
-    div(class="email emailbuttons")
+  div#emails("v-show"="campaigns")
+    div(class="email buttons")
         button("v-for"="campaign in campaigns", "v-bind:key"="campaign", "v-bind:class"="['email-button', { active: currentCampaign === campaign }]", "v-on:click"="currentCampaign = campaign") {{ campaign }}
-    div(class="email emailreport")
-        table("v-for"="(value, key) in report[currentCampaign]", "v-bind:key"="key")
-            thead
-                tr
-                    th {{ key }}
+    div(class="email report")
+        div(class="alert", "v-if"="needsUpdating()")
+            i The data for this email needs to be updated.
+        table
             tbody
-                tr
-                    td("v-if"="value.hasOwnProperty('hasOwnProperty')") noodle
-                    td("v-else") {{ value }}
+                tr("v-for"="(value, key) in report[currentCampaign]")
+                    div(class="headers")
+                        th {{ key }}
+                    div(class="data")
+                        td#alertDate("v-if"="key === 'Sent'") {{ value }}
+                        td("v-else-if"="isString(value)") {{ value }}
+                        td("v-else")
+                            div("v-for"="subValue in value")
+                                p("v-for"="item in subValue") {{ item | formatItem }} &nbsp;
+
 
   script(type="text/javascript" src="scripts/util/dropZone.js")
   script(type="text/javascript" src="scripts/util/CSVParser.js")

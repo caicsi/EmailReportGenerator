@@ -1,25 +1,26 @@
-Vue.component('tab-home', {
-    template: '<div>Home component</div>'
-})
-Vue.component('tab-posts', {
-    template: '<div>Posts component</div>'
-})
-Vue.component('tab-archive', {
-    template: '<div>Archive component</div>'
-})
-
-// Vue.component('report', {
-//
-// })
-
-//var emails = { }
 
 let emailReport = new Vue({
     el: '#emails',
     data: {
         campaigns: ["Placeholder"],
         currentCampaign: "",
-        report: {"Placeholder": { "Choose an email to see more info" : "Example data" } }
+        report: {"Placeholder": { "" : "Upload a spreadsheet to view the email report" } }
+    },
+    methods: {
+        isString: function (value) {
+            if (!value) return true;
+            return (Object.getOwnPropertyNames(value)[Object.getOwnPropertyNames(value).length - 1] === "length")
+        },
+        needsUpdating: function () {
+            if (this.currentCampaign === "") return false;
+            let date = new Date(this.report[this.currentCampaign]["Sent"]);
+            return (date.toDateString() !== new Date().toDateString());
+        }
+    },
+    filters: {
+        formatItem: function (item) {
+            return item.replace(/"/g, "");
+        }
     }
 });
 
@@ -30,6 +31,7 @@ function generateReport(data) {
         for (let key in line) {
             content[key] = line[key];
         }
+
     });
 
     //console.log(content);
