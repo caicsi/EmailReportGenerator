@@ -5,7 +5,8 @@ let emailReport = new Vue({
         emailReport: "none",
         campaigns: [],
         currentCampaign: "",
-        report: {}
+        report: {},
+        reports: []
     },
     computed: {
         //variable called that will determine if the email is old data and needs to be updated
@@ -59,8 +60,28 @@ function generateReport(data) {
         for (let key in line) {
             content[key] = line[key];
         }
-
     });
+
+    let report = {};
+    let found = false;
+    report["name"] = content["Campaign"];
+    report["report"] = content;
+
+    //check if there are other emails from this date
+    emailReport.reports.forEach(dateGroup => {
+        if (dateGroup["date"] === content["Sent"]) {
+            dateGroup["emails"].push(report);
+            found = true;
+        }
+    });
+
+    //if this is the first email for this date, create new entry
+    if (!found) {
+        let dateGroup = {};
+        dateGroup["date"] = content["Sent"];
+        dateGroup["emails"] = [report];
+        emailReport.reports.push(dateGroup);
+    }
 
     //console.log(content);
     emailReport.report[data[0]["Campaign"]] = content;

@@ -3,7 +3,7 @@ extends layout
 block content
   div#drop-box
     input#file-input(type="file" multiple="")
-  div#initialMsg("v-bind:style"="{ display: noReports }")
+  //div#initialMsg("v-bind:style"="{ display: noReports }")
       p You have no email reports currently. Upload an email to get started!
   div#emails("v-show"="campaigns", "v-bind:style"="{ display: emailReport }")
     div(class="email buttons")
