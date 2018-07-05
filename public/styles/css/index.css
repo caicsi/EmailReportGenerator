@@ -5,7 +5,7 @@ div#drop-box {
 }
 
 div.alert {
-  background-color: #e8abab;
+  background-color: #ffcf16;
   padding: 3px;
 }
 
@@ -68,7 +68,7 @@ td div p {
 }
 
 td#alertDate {
-  color: #c61515;
+  color: #ffcf16;
 }
 
 tr {

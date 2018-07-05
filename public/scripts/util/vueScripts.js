@@ -2,24 +2,52 @@
 let emailReport = new Vue({
     el: '#emails',
     data: {
-        campaigns: ["Placeholder"],
+        emailReport: "none",
+        campaigns: [],
         currentCampaign: "",
-        report: {"Placeholder": { "" : "Upload a spreadsheet to view the email report" } }
+        report: {}
     },
-    methods: {
-        isString: function (value) {
-            if (!value) return true;
-            return (Object.getOwnPropertyNames(value)[Object.getOwnPropertyNames(value).length - 1] === "length")
-        },
+    computed: {
+        //variable called that will determine if the email is old data and needs to be updated
         needsUpdating: function () {
             if (this.currentCampaign === "") return false;
             let date = new Date(this.report[this.currentCampaign]["Sent"]);
             return (date.toDateString() !== new Date().toDateString());
+        },
+        //var called that will determine if there are any emails yet
+        noReports: function () {
+            if (this.emailReport === "none") {
+                return "flex";
+            } else {
+                return "none";
+            }
+        }
+    },
+    methods: {
+        //function to determine if the second element of a key-value pair is an array or just a string value
+        isString: function (value) {
+            if (!value) return true;
+            return (Object.getOwnPropertyNames(value)[Object.getOwnPropertyNames(value).length - 1] === "length")
         }
     },
     filters: {
+        //remove the quotations from a value (in an array)
         formatItem: function (item) {
             return item.replace(/"/g, "");
+        }
+    },
+    watch: {
+        //watch campaigns and whenever it changes (a new report is uploaded and parsed), store to local storage
+        campaigns: function (newCampaignArray, oldCampaignArray) {
+            //let newEmail = newCampaignArray[newCampaignArray.length - 1];
+            //let newReport
+            //localStorage.removeItem('campaigns');
+            localStorage.setItem('campaigns', JSON.stringify(this.campaigns));
+
+            //localStorage.removeItem('report');
+            localStorage.setItem('report', JSON.stringify(this.report));
+
+            this.emailReport = "flex";
         }
     }
 });
@@ -40,3 +68,24 @@ function generateReport(data) {
 
     console.log(emailReport.report);
 }
+
+function checkForReport() {
+
+    if (typeof(Storage) !== "undefined") {
+
+        //check if past emails have been stored
+        if(localStorage.getItem("campaigns")) {
+            //if so, load them into Vue vars
+            // localStorage.removeItem('report');
+            // localStorage.removeItem('campaigns');
+
+            emailReport.campaigns = JSON.parse(localStorage.getItem("campaigns"));
+            emailReport.report = JSON.parse(localStorage.getItem("report"));
+        }
+
+    } else {
+        //local storage not supported
+    }
+}
+
+checkForReport();

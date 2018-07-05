@@ -8,3 +8,5 @@ document.addEventListener("DOMContentLoaded", () => {
     dropbox.addEventListener("dragover", dragover, false);
     dropbox.addEventListener("drop", drop, false);
 });
+
+//checkForReport();

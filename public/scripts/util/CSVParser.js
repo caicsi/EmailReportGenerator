@@ -89,11 +89,12 @@ function OverviewCSVtoJSON(lines, json) {
         }
 
         //check if line is just a header
-        if (lines[i].length === 1 && lines[i][0].length > 2) {
+        //determined by: either it only has one column, OR the second column is empty (and the first column is not empty)
+        if ((lines[i].length === 1 && lines[i][0].length > 2) || (lines[i][0].length > 1 && lines[i][1] === "")) {
             let subJson = {};
             let j = i + 1;
             for (; j < lines.length; j++) {
-                if (lines[j].length === 1){
+                if (lines[j][0].length < 3){
                     break;
                 }
                 subJson[j - (i + 1)] = lines[j];
@@ -105,6 +106,7 @@ function OverviewCSVtoJSON(lines, json) {
         }
         //otherwise, proceed to make json entry as normal
         else if (lines[i].length > 1) {
+            //console.log("" + lines[i][0] + " length is: " + lines[i].length);
             entry[lines[i][0]] = lines[i][1];
 
             //json.push(entry); //move to below if/else if we want to see the gaps in the CSV file

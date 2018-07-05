@@ -3,11 +3,13 @@ extends layout
 block content
   div#drop-box
     input#file-input(type="file" multiple="")
-  div#emails("v-show"="campaigns")
+  div#initialMsg("v-bind:style"="{ display: noReports }")
+      p You have no email reports currently. Upload an email to get started!
+  div#emails("v-show"="campaigns", "v-bind:style"="{ display: emailReport }")
     div(class="email buttons")
         button("v-for"="campaign in campaigns", "v-bind:key"="campaign", "v-bind:class"="['email-button', { active: currentCampaign === campaign }]", "v-on:click"="currentCampaign = campaign") {{ campaign }}
     div(class="email report")
-        div(class="alert", "v-if"="needsUpdating()")
+        div(class="alert", "v-if"="needsUpdating")
             i The data for this email needs to be updated.
         table
             tbody
