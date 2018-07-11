@@ -6,7 +6,8 @@ let emailReport = new Vue({
         campaigns: [],
         currentCampaign: "",
         report: {},
-        reports: []
+        reports: [],
+        index: null
     },
     computed: {
         //variable called that will determine if the email is old data and needs to be updated
@@ -22,6 +23,21 @@ let emailReport = new Vue({
             } else {
                 return "none";
             }
+        },
+        emailsPerDate: function() {
+            if (this.index !== null){
+                console.log(this.reports[this.index].emails);
+                return this.reports[this.index].emails;
+            }
+            return [];
+
+        },
+        currentReport: function() {
+            if (this.index !== null && this.currentCampaign !== "") {
+                console.log(this.reports[this.index].emails[this.currentCampaign].report);
+                return this.reports[this.index].emails[this.currentCampaign].report;
+            }
+            return [];
         }
     },
     methods: {
@@ -62,9 +78,13 @@ function generateReport(data) {
         }
     });
 
+
+    //new data structure
+
     let report = {};
     let found = false;
     report["name"] = content["Campaign"];
+    report["service"] = "myEmma";
     report["report"] = content;
 
     //check if there are other emails from this date
@@ -82,14 +102,20 @@ function generateReport(data) {
         dateGroup["emails"] = [report];
         emailReport.reports.push(dateGroup);
     }
+    console.log("reports (new data structure)");
+    console.log(emailReport.reports);
+
+    //old data structure
 
     //console.log(content);
-    emailReport.report[data[0]["Campaign"]] = content;
+    emailReport.report[[data[0]["Campaign"]]] = content;
     emailReport.campaigns.push(data[0]["Campaign"]);
 
+    console.log("report (old data structure)");
     console.log(emailReport.report);
 }
 
+//check local storage for previous data
 function checkForReport() {
 
     if (typeof(Storage) !== "undefined") {
@@ -100,8 +126,12 @@ function checkForReport() {
             // localStorage.removeItem('report');
             // localStorage.removeItem('campaigns');
 
-            emailReport.campaigns = JSON.parse(localStorage.getItem("campaigns"));
-            emailReport.report = JSON.parse(localStorage.getItem("report"));
+            // emailReport.campaigns = JSON.parse(localStorage.getItem("campaigns"));
+            // emailReport.report = JSON.parse(localStorage.getItem("report"));
+        }
+
+        if(localStorage.getItem("reports")) {
+            emailReport.reports = JSON.parse(localStorage.getItem("reports"));
         }
 
     } else {
@@ -109,4 +139,5 @@ function checkForReport() {
     }
 }
 
+//run this function upon initialization to fetch data from local storage
 checkForReport();

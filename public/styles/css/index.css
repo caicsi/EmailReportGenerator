@@ -11,6 +11,13 @@ div.alert {
 
 div#emails {
   margin: 2rem;
+}
+
+div#emails select {
+  margin-bottom: 1rem;
+}
+
+div#reports {
   display: flex;
 }
 
