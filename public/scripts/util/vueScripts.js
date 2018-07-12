@@ -2,7 +2,7 @@
 let emailReport = new Vue({
     el: '#emails',
     data: {
-        emailReport: "none",
+        showReports: "none",
         campaigns: [],
         currentCampaign: "",
         report: {},
@@ -13,20 +13,12 @@ let emailReport = new Vue({
         //variable called that will determine if the email is old data and needs to be updated
         needsUpdating: function () {
             if (this.currentCampaign === "") return false;
-            let date = new Date(this.report[this.currentCampaign]["Sent"]);
+            let date = new Date(this.reports[this.index].emails[this.currentCampaign].report["Sent"]);
             return (date.toDateString() !== new Date().toDateString());
-        },
-        //var called that will determine if there are any emails yet
-        noReports: function () {
-            if (this.emailReport === "none") {
-                return "flex";
-            } else {
-                return "none";
-            }
         },
         emailsPerDate: function() {
             if (this.index !== null){
-                console.log(this.reports[this.index].emails);
+                //console.log(this.reports[this.index].emails);
                 return this.reports[this.index].emails;
             }
             return [];
@@ -34,7 +26,7 @@ let emailReport = new Vue({
         },
         currentReport: function() {
             if (this.index !== null && this.currentCampaign !== "") {
-                console.log(this.reports[this.index].emails[this.currentCampaign].report);
+                //console.log(this.reports[this.index].emails[this.currentCampaign].report);
                 return this.reports[this.index].emails[this.currentCampaign].report;
             }
             return [];
@@ -55,16 +47,12 @@ let emailReport = new Vue({
     },
     watch: {
         //watch campaigns and whenever it changes (a new report is uploaded and parsed), store to local storage
-        campaigns: function (newCampaignArray, oldCampaignArray) {
-            //let newEmail = newCampaignArray[newCampaignArray.length - 1];
-            //let newReport
-            //localStorage.removeItem('campaigns');
-            localStorage.setItem('campaigns', JSON.stringify(this.campaigns));
+        reports: function (newCampaignArray, oldCampaignArray) {
+            //localStorage.setItem('campaigns', JSON.stringify(this.campaigns));
 
-            //localStorage.removeItem('report');
-            localStorage.setItem('report', JSON.stringify(this.report));
+            //localStorage.setItem('report', JSON.stringify(this.report));
 
-            this.emailReport = "flex";
+            this.showReports = "block";
         }
     }
 });
@@ -88,8 +76,9 @@ function generateReport(data) {
     report["report"] = content;
 
     //check if there are other emails from this date
+    let reportDate = new Date(content["Sent"]).toDateString();
     emailReport.reports.forEach(dateGroup => {
-        if (dateGroup["date"] === content["Sent"]) {
+        if (new Date(dateGroup["date"]).toDateString() === reportDate) {
             dateGroup["emails"].push(report);
             found = true;
         }
@@ -102,17 +91,9 @@ function generateReport(data) {
         dateGroup["emails"] = [report];
         emailReport.reports.push(dateGroup);
     }
-    console.log("reports (new data structure)");
+
+    console.log("reports (new data structure): ");
     console.log(emailReport.reports);
-
-    //old data structure
-
-    //console.log(content);
-    emailReport.report[[data[0]["Campaign"]]] = content;
-    emailReport.campaigns.push(data[0]["Campaign"]);
-
-    console.log("report (old data structure)");
-    console.log(emailReport.report);
 }
 
 //check local storage for previous data

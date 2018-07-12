@@ -3,10 +3,9 @@ extends layout
 block content
     div#drop-box
         input#file-input(type="file" multiple="")
-        //div#initialMsg("v-bind:style"="{ display: noReports }")
-            p You have no email reports currently. Upload an email to get started!
-    div#emails("v-bind:style"="{ display: emailReport }")
+    div#emails("v-bind:style"="{ display: showReports }")
         div
+            p Choose a date to view emails from that date.
             select("v-model"="index")
                 option("v-for"="(entry, index) in reports", v-bind:value="index") {{ entry.date }}
             //span {{ index }}
@@ -14,7 +13,7 @@ block content
             div(class="email buttons")
                 button("v-for"="(campaign, index) in emailsPerDate", "v-bind:key"="campaign", "v-bind:class"="['email-button', { active: currentCampaign === campaign.name }]", "v-on:click"="currentCampaign = index") {{ campaign.name }}
             div(class="email report")
-                //div(class="alert", "v-if"="needsUpdating")
+                div(class="alert", "v-if"="needsUpdating")
                     i The data for this email needs to be updated.
                 table
                     tbody
