@@ -1,3 +1,7 @@
+html {
+  font-family: 'Catamaran', sans-serif;
+}
+
 div#drop-box {
   padding: 1rem 2rem;
   background-color: #236192;

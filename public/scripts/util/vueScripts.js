@@ -1,33 +1,59 @@
 
+Vue.component('initial-box', {
+    data: function () {
+        return {
+            header: "Welcome to the Email Report Generator",
+            text: "Upload a csv file of an email to get started.",
+        }
+    },
+    template: '<div><h1 class="drop-box-text">{{ header }}</h1><p>{{ text }}</p></div>'
+});
+
+Vue.component('standard-box', {
+    data: function () {
+        return {
+            text: "Drag and drop to upload an additional email"
+        }
+    },
+    template: '<p>{{ text }}</p>'
+});
+
+let dropBox = new Vue({
+    el: '#drop-box',
+    data: {
+        currentBox: 'initial-box',
+        styling: {
+            "padding": '30%',
+            "background": 'radial-gradient(#0e76a3, #0d56a2, #0d2b56)'
+        }
+    }
+});
+
 let emailReport = new Vue({
     el: '#emails',
     data: {
         showReports: "none",
-        campaigns: [],
-        currentCampaign: "",
-        report: {},
         reports: [],
-        index: null
+        currentCampaign: null,
+        currentDate: null
     },
     computed: {
         //variable called that will determine if the email is old data and needs to be updated
         needsUpdating: function () {
-            if (this.currentCampaign === "") return false;
-            let date = new Date(this.reports[this.index].emails[this.currentCampaign].report["Sent"]);
+            if (this.currentCampaign === null || this.currentDate === null) return false;
+            let date = new Date(this.reports[this.currentDate].emails[this.currentCampaign].report["Sent"]);
             return (date.toDateString() !== new Date().toDateString());
         },
         emailsPerDate: function() {
-            if (this.index !== null){
-                //console.log(this.reports[this.index].emails);
-                return this.reports[this.index].emails;
+            if (this.currentDate !== null){
+                return this.reports[this.currentDate].emails;
             }
             return [];
 
         },
         currentReport: function() {
-            if (this.index !== null && this.currentCampaign !== "") {
-                //console.log(this.reports[this.index].emails[this.currentCampaign].report);
-                return this.reports[this.index].emails[this.currentCampaign].report;
+            if (this.currentDate !== null && this.currentCampaign !== null) {
+                return this.reports[this.currentDate].emails[this.currentCampaign].report;
             }
             return [];
         }
@@ -48,14 +74,24 @@ let emailReport = new Vue({
     watch: {
         //watch campaigns and whenever it changes (a new report is uploaded and parsed), store to local storage
         reports: function (newCampaignArray, oldCampaignArray) {
-            //localStorage.setItem('campaigns', JSON.stringify(this.campaigns));
 
-            //localStorage.setItem('report', JSON.stringify(this.report));
+            localStorage.setItem('emailGeneratorReports', JSON.stringify(this.reports));
 
             this.showReports = "block";
         }
     }
 });
+
+
+//change the dropbox depending on if any emails have been uploaded
+emailReport.$watch('reports', function (newValue, oldValue) {
+    dropBox.currentBox = 'standard-box';
+    dropBox.styling = {
+        "padding": "1%",
+        "background": 'linear-gradient(-90deg, #0d2b56, #0d56a2, #0e76a3)'
+    };
+});
+
 
 function generateReport(data) {
 
@@ -102,17 +138,11 @@ function checkForReport() {
     if (typeof(Storage) !== "undefined") {
 
         //check if past emails have been stored
-        if(localStorage.getItem("campaigns")) {
+        if(localStorage.getItem("emailGeneratorReports")) {
             //if so, load them into Vue vars
-            // localStorage.removeItem('report');
-            // localStorage.removeItem('campaigns');
+            // localStorage.removeItem('emailGeneratorReports');
 
-            // emailReport.campaigns = JSON.parse(localStorage.getItem("campaigns"));
-            // emailReport.report = JSON.parse(localStorage.getItem("report"));
-        }
-
-        if(localStorage.getItem("reports")) {
-            emailReport.reports = JSON.parse(localStorage.getItem("reports"));
+            emailReport.reports = JSON.parse(localStorage.getItem("emailGeneratorReports"));
         }
 
     } else {

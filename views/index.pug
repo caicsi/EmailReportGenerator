@@ -1,12 +1,13 @@
 extends layout
 
 block content
-    div#drop-box
+    div#drop-box("v-bind:style"="styling")
+        component("v-bind:is"="currentBox")
         input#file-input(type="file" multiple="")
     div#emails("v-bind:style"="{ display: showReports }")
         div
             p Choose a date to view emails from that date.
-            select("v-model"="index")
+            select("v-model"="currentDate")
                 option("v-for"="(entry, index) in reports", v-bind:value="index") {{ entry.date }}
             //span {{ index }}
         div#reports
