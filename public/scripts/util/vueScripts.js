@@ -140,9 +140,9 @@ function checkForReport() {
         //check if past emails have been stored
         if(localStorage.getItem("emailGeneratorReports")) {
             //if so, load them into Vue vars
-            // localStorage.removeItem('emailGeneratorReports');
+            localStorage.removeItem('emailGeneratorReports');
 
-            emailReport.reports = JSON.parse(localStorage.getItem("emailGeneratorReports"));
+            //emailReport.reports = JSON.parse(localStorage.getItem("emailGeneratorReports"));
         }
 
     } else {

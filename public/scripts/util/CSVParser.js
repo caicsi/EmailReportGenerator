@@ -60,10 +60,11 @@ function CSVToJSONConverter(Blob, callback) {
 
 function CSVtoJSON(lines, json, headers) {
     //loop through entries (proceeding the headers)
+    let entry = {};
     lines.filter(line => line.length > 1)
         .slice(1) //remove the headers
         .forEach(line => {
-            let entry = {};
+            entry = {};
 
             //loop through columns
             for(let j = 0; j < headers.length; j++) {

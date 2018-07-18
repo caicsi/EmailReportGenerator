@@ -12,7 +12,7 @@
     "http-errors": "~1.6.2",
     "jszip": "^3.1.5",
     "morgan": "~1.9.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.9.2",
     "pug": "^2.0.0-beta11",
     "vue": "^2.5.16",
     "vue-select": "^2.4.0"
