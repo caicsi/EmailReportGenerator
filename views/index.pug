@@ -1,8 +1,36 @@
 extends layout
 
 block content
-  div#drop-box
-    input#file-input(type="file" multiple="")
-  script(type="text/javascript" src="scripts/util/dropZone.js")
-  script(type="text/javascript" src="scripts/util/CSVParser.js")
-  script(type="text/javascript" src="scripts/index.js")
+    div#drop-box("v-bind:style"="styling")
+        component("v-bind:is"="currentBox")
+        input#file-input(type="file" multiple="")
+    div#emails("v-bind:style"="{ display: showReports }")
+        div
+            p Choose a date to view emails from that date.
+            select("v-model"="currentDate")
+                option("v-for"="(entry, index) in reports", v-bind:value="index") {{ entry.date }}
+            //span {{ index }}
+        div#reports
+            div(class="email buttons")
+                button("v-for"="(campaign, index) in emailsPerDate", "v-bind:key"="campaign", "v-bind:class"="['email-button', { active: currentCampaign === campaign.name }]", "v-on:click"="currentCampaign = index") {{ campaign.name }}
+            div(class="email report")
+                div(class="alert", "v-if"="needsUpdating")
+                    i The data for this email needs to be updated.
+                table
+                    tbody
+                        tr("v-for"="(value, key) in currentReport", "v-bind:key"="key")
+                            div(class="headers")
+                                th {{ key }}
+                            div(class="data")
+                                td#alertDate("v-if"="key === 'Sent'") {{ value }}
+                                td("v-else-if"="isString(value)") {{ value }}
+                                td("v-else")
+                                    div("v-for"="subValue in value")
+                                        p("v-for"="item in subValue") {{ item | formatItem }} &nbsp;
+
+
+    script(type="text/javascript" src="scripts/util/dropZone.js")
+    script(type="text/javascript" src="scripts/util/CSVParser.js")
+    script(type="text/javascript" src="scripts/index.js")
+    script(type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js")
+    script(type="text/javascript" src="scripts/util/vueScripts.js")
