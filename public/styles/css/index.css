@@ -2,9 +2,26 @@ html {
   font-family: 'Catamaran', sans-serif;
 }
 
-div#drop-box {
+body {
+  margin: 0;
+}
+
+div#header {
   padding: 1rem 2rem;
-  background-color: #236192;
+  background-color: #d7e8ef;
+  box-shadow: 0 0 2px 0 gray;
+}
+
+div#header h1 {
+  font-size: 1em;
+}
+
+div#header h1#cc {
+  position: absolute;
+  right: 2rem;
+}
+
+div#drop-box {
   color: #fff;
 }
 
@@ -39,16 +56,20 @@ div.buttons button {
   width: 10rem;
 }
 
+div.buttons button:hover {
+  background-color: #d7e8ef;
+}
+
+div.buttons button.active {
+  background-color: #d7e8ef;
+}
+
 div.report {
   display: flex;
   flex-flow: column;
   border: 1px solid gray;
   width: 100%;
   box-sizing: border-box;
-}
-
-table {
-  background-color: #e0eef9;
 }
 
 th, td {

@@ -1,15 +1,16 @@
 
-Vue.component('initial-box', {
+
+Vue.component('initial-drop-box', {
     data: function () {
         return {
             header: "Welcome to the Email Report Generator",
-            text: "Upload a csv file of an email to get started.",
+            text: "Upload a csv file of an email to get started."
         }
     },
-    template: '<div><h1 class="drop-box-text">{{ header }}</h1><p>{{ text }}</p></div>'
+    template: '<div class="drop-box-text"><h1>{{ header }}</h1><p>{{ text }}</p></div>'
 });
 
-Vue.component('standard-box', {
+Vue.component('standard-drop-box', {
     data: function () {
         return {
             text: "Drag and drop to upload an additional email"
@@ -21,10 +22,20 @@ Vue.component('standard-box', {
 let dropBox = new Vue({
     el: '#drop-box',
     data: {
-        currentBox: 'initial-box',
+        currentBox: 'initial-drop-box',
         styling: {
             "padding": '30%',
             "background": 'radial-gradient(#0e76a3, #0d56a2, #0d2b56)'
+        }
+    }
+});
+
+let headerDiv = new Vue({
+    el: '#header',
+    computed: {
+        showHeader: function () {
+            if (dropBox.currentBox === 'standard-drop-box') return "flex";
+            return "none";
         }
     }
 });
@@ -84,16 +95,21 @@ let emailReport = new Vue({
 
 
 //change the dropbox depending on if any emails have been uploaded
-emailReport.$watch('reports', function (newValue, oldValue) {
-    dropBox.currentBox = 'standard-box';
+emailReport.$watch('reports', function () {
+    dropBox.currentBox = 'standard-drop-box';
     dropBox.styling = {
         "padding": "1%",
-        "background": 'linear-gradient(-90deg, #0d2b56, #0d56a2, #0e76a3)'
+        "background": 'linear-gradient(-90deg, #0d2b56, #0d56a2, #0e76a3)',
+        "margin": "1rem"
     };
 });
 
 
 function generateReport(data) {
+
+    console.log("data: ");
+    console.log(data);
+
 
     let content = {};
     data.forEach(line => {
@@ -102,6 +118,9 @@ function generateReport(data) {
         }
     });
 
+
+    console.log("content: ");
+    console.log(content);
 
     //new data structure
 

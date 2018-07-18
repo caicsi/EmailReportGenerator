@@ -49,8 +49,6 @@ function CSVToJSONConverter(Blob, callback) {
            json = CSVtoJSON(lines, json, headers);
         }
 
-        //json.shift(); headers are already removed above
-
         callback(json, lines.filter(line => line.length === 1 && line[0] !== ""));
     };
 
@@ -78,9 +76,13 @@ function CSVtoJSON(lines, json, headers) {
 
 function OverviewCSVtoJSON(lines, json) {
 
+    let entry = {};
+    let subJson = {};
+
+
     //loop through entries
     for (let i = 0; i < lines.length; i++) {
-        let entry = {};
+        entry = {};
 
         //remove colons that are at the end of the string
         for(let k = 0; k < lines[i].length; k++) {
@@ -92,7 +94,7 @@ function OverviewCSVtoJSON(lines, json) {
         //check if line is just a header
         //determined by: either it only has one column, OR the second column is empty (and the first column is not empty)
         if ((lines[i].length === 1 && lines[i][0].length > 2) || (lines[i][0].length > 1 && lines[i][1] === "")) {
-            let subJson = {};
+            subJson = {};
             let j = i + 1;
             for (; j < lines.length; j++) {
                 if (lines[j][0].length < 3){
@@ -122,6 +124,9 @@ function OverviewCSVtoJSON(lines, json) {
 function processData(data, metadata) {
     console.log(metadata);
     console.log(data);
+
+    //determine if myEmma or Pardot
+    //Pardot can have multiple emails in one sheet
 
     generateReport(data);
 }
