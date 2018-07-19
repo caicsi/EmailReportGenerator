@@ -51,8 +51,8 @@ let emailReport = new Vue({
     computed: {
         //variable called that will determine if the email is old data and needs to be updated
         needsUpdating: function () {
-            if (this.currentCampaign === null || this.currentDate === null) return false;
-            let date = new Date(this.reports[this.currentDate].emails[this.currentCampaign].report["Sent"]);
+            if (this.currentDate === null) return false;
+            let date = new Date(this.reports[this.currentDate].date);
             return (date.toDateString() !== new Date().toDateString());
         },
         emailsPerDate: function() {
@@ -107,8 +107,8 @@ emailReport.$watch('reports', function () {
 
 function generateReport(data) {
 
-    console.log("data: ");
-    console.log(data);
+    //console.log("data: ");
+    //console.log(data);
 
 
     let content = {};
@@ -119,8 +119,8 @@ function generateReport(data) {
     });
 
 
-    console.log("content: ");
-    console.log(content);
+    //console.log("content: ");
+    //console.log(content);
 
     //new data structure
 
@@ -147,8 +147,8 @@ function generateReport(data) {
         emailReport.reports.push(dateGroup);
     }
 
-    console.log("reports (new data structure): ");
-    console.log(emailReport.reports);
+    //console.log("reports (new data structure): ");
+    //console.log(emailReport.reports);
 }
 
 //check local storage for previous data

@@ -39,14 +39,17 @@ function CSVToJSONConverter(Blob, callback) {
 
         let headers = lines.filter(line => line.length > 1)[0];
 
-        //check if the CSV is the overview; headers will be different.
-        //detected by seeing if the very first line has more than one column
-        if (headers === lines[0]) {
-            json = OverviewCSVtoJSON(lines, json);
+        console.log("headers");
+        console.log(headers);
+
+        //check if the CSV has all headers on top, or each line has a header.
+        //Pardot will have all headers on top.
+        if (headers[0] === "Email Id") {
+            json = CSVtoJSON(lines, json, headers);
         }
         //if it's not the overview, parse normally
         else {
-           json = CSVtoJSON(lines, json, headers);
+            json = OverviewCSVtoJSON(lines, json);
         }
 
         callback(json, lines.filter(line => line.length === 1 && line[0] !== ""));
@@ -128,7 +131,49 @@ function processData(data, metadata) {
     //determine if myEmma or Pardot
     //Pardot can have multiple emails in one sheet
 
+    if (data[0]["Email Id"]) {
+        //pardot
+        getPardotEmails(data);
+    }
+
     generateReport(data);
+}
+
+function getPardotEmails(data) {
+    console.log("pardot");
+
+    // let promises = data.filter(line => line["Email Id"] !== undefined && line["Email Id"] !== "")
+    //     .map(line => {
+    //         return new Promise((resolve, reject) => {
+    //             const xhr = new XMLHttpRequest();
+    //             //needs user_key and api_key still, to be sent
+    //             xhr.open('POST', 'https://pi.pardot.com/api/email/version/4/do/stats/id/' + line["Email Id"] + "?");
+    //             xhr.onload = () => resolve(xhr.responseText);
+    //             xhr.onerror = () => reject(xhr.statusText);
+    //             xhr.send();
+    //         });
+    // });
+
+    //console.log(data.filter(line => line["Email Id"] !== undefined && line["Email Id"] !== ""));
+
+    Promise.all(
+        data.filter(line => line["Email Id"] !== undefined && line["Email Id"] !== "")
+            .map(line => {
+                return new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    //needs user_key and api_key still, to be sent
+                    xhr.open('POST', 'https://pi.pardot.com/api/email/version/4/do/stats/id/' + line["Email Id"] + "?");
+                    xhr.onload = () => resolve(xhr.responseText);
+                    xhr.onerror = () => reject(xhr.statusText);
+                    xhr.send();
+                });
+        })
+    ).then(function(values) {
+        console.log(values);
+    }).catch(function(values) {
+        console.log("error");
+        console.log(values);
+    });
 }
 
 /*
