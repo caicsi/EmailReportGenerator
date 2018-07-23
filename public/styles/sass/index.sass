@@ -3,10 +3,11 @@ html
 
 body
   margin: 0
+  background-color: #d7e8ef
 
 div#header
   padding: 1rem 2rem
-  background-color: #d7e8ef
+  background-color: #ffffff
   box-shadow: 0 0 2px 0 gray
   h1
     font-size: 1em
@@ -21,16 +22,29 @@ div#drop-box
   color: rebeccapurple
 
 div.alert
-  background-color: #ffcf16
+  color: #f7c400
+  display: inline-flex
+  align-items: center
   padding: 3px
+  margin-bottom: 1rem
+  //border: 1px solid #9fa7ad
+  p
+    margin: 3px
 
 div#emails
-  margin: 2rem
+  margin: 1rem
+  padding: 1rem
+  background-color: #ffffff
   //border: 1px solid gray
   //display: block
   select
     margin-bottom: 1rem
-
+    //padding: 1rem
+    //border-style: solid
+    //border-color: gray
+    //width: 10rem
+    //height: 3rem
+    //border-width: 0 0 1px 1px
 
 div#reports
   display: flex
@@ -45,10 +59,15 @@ div.buttons
     border-color: gray
     border-width: 0 0 1px 1px
     width: 10rem
+    font-size: 12px
     &:hover
-      background-color: #d7e8ef
+      background-color: #0e76a3
+      color: #ffffff
     &.active
-      background-color: #d7e8ef
+      background-color: #0d56a2
+      color: #ffffff
+    &:focus
+      outline: 0
 
 div.report
   display: flex
@@ -81,7 +100,7 @@ td
       background-color: #edf7ff
 
 td#alertDate
-  color: #ffcf16
+  color: #f7c400
 
 tr
   display: flex

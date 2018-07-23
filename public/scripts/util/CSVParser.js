@@ -39,9 +39,6 @@ function CSVToJSONConverter(Blob, callback) {
 
         let headers = lines.filter(line => line.length > 1)[0];
 
-        console.log("headers");
-        console.log(headers);
-
         //check if the CSV has all headers on top, or each line has a header.
         //Pardot will have all headers on top.
         if (headers[0] === "Email Id") {
@@ -112,7 +109,6 @@ function OverviewCSVtoJSON(lines, json) {
         }
         //otherwise, proceed to make json entry as normal
         else if (lines[i].length > 1) {
-            //console.log("" + lines[i][0] + " length is: " + lines[i].length);
             entry[lines[i][0]] = lines[i][1];
 
             //json.push(entry); //move to below if/else if we want to see the gaps in the CSV file
@@ -142,20 +138,6 @@ function processData(data, metadata) {
 function getPardotEmails(data) {
     console.log("pardot");
 
-    // let promises = data.filter(line => line["Email Id"] !== undefined && line["Email Id"] !== "")
-    //     .map(line => {
-    //         return new Promise((resolve, reject) => {
-    //             const xhr = new XMLHttpRequest();
-    //             //needs user_key and api_key still, to be sent
-    //             xhr.open('POST', 'https://pi.pardot.com/api/email/version/4/do/stats/id/' + line["Email Id"] + "?");
-    //             xhr.onload = () => resolve(xhr.responseText);
-    //             xhr.onerror = () => reject(xhr.statusText);
-    //             xhr.send();
-    //         });
-    // });
-
-    //console.log(data.filter(line => line["Email Id"] !== undefined && line["Email Id"] !== ""));
-
     Promise.all(
         data.filter(line => line["Email Id"] !== undefined && line["Email Id"] !== "")
             .map(line => {
@@ -175,6 +157,9 @@ function getPardotEmails(data) {
         console.log(values);
     });
 }
+
+
+
 
 /*
 Pre: Takes in an array of lines from a CSV file

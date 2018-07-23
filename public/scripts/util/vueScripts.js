@@ -60,7 +60,6 @@ let emailReport = new Vue({
                 return this.reports[this.currentDate].emails;
             }
             return [];
-
         },
         currentReport: function() {
             if (this.currentDate !== null && this.currentCampaign !== null) {
@@ -84,11 +83,16 @@ let emailReport = new Vue({
     },
     watch: {
         //watch campaigns and whenever it changes (a new report is uploaded and parsed), store to local storage
-        reports: function (newCampaignArray, oldCampaignArray) {
+        reports: {
+            handler: function (newCampaignArray, oldCampaignArray) {
 
-            localStorage.setItem('emailGeneratorReports', JSON.stringify(this.reports));
+                console.log("updating data...");
 
-            this.showReports = "block";
+                localStorage.setItem('emailGeneratorReports', JSON.stringify(this.reports));
+
+                this.showReports = "block";
+            },
+            deep: true
         }
     }
 });
@@ -107,20 +111,13 @@ emailReport.$watch('reports', function () {
 
 function generateReport(data) {
 
-    //console.log("data: ");
-    //console.log(data);
-
-
+    //make array of objects into one object
     let content = {};
     data.forEach(line => {
         for (let key in line) {
             content[key] = line[key];
         }
     });
-
-
-    //console.log("content: ");
-    //console.log(content);
 
     //new data structure
 
@@ -159,9 +156,9 @@ function checkForReport() {
         //check if past emails have been stored
         if(localStorage.getItem("emailGeneratorReports")) {
             //if so, load them into Vue vars
-            localStorage.removeItem('emailGeneratorReports');
+            //localStorage.removeItem('emailGeneratorReports');
 
-            //emailReport.reports = JSON.parse(localStorage.getItem("emailGeneratorReports"));
+            emailReport.reports = JSON.parse(localStorage.getItem("emailGeneratorReports"));
         }
 
     } else {
@@ -171,3 +168,31 @@ function checkForReport() {
 
 //run this function upon initialization to fetch data from local storage
 checkForReport();
+
+
+//maybe have json be a parameter
+function XMLtoJSON(data) {
+
+    let json = {};
+    data = '<rsp stat="ok" version="1.0"> <stats> <sent>1003</sent> <delivered>543</delivered> <total_clicks>54</total_clicks> <unique_clicks>5</unique_clicks> <soft_bounced>3</soft_bounced> <hard_bounced>2</hard_bounced> <opt_outs>454</opt_outs> <spam_complaints>123</spam_complaints> <opens>34</opens> <unique_opens>...</unique_opens> <delivery_rate>...</delivery_rate> <opens_rate>100%</opens_rate> <click_through_rate>20%</click_through_rate> <unique_click_through_rate>...</unique_click_through_rate> <click_open_ratio>...</click_open_ratio> <opt_out_rate>34%</opt_out_rate> <spam_complaint_rate>0.0</spam_complaint_rate> </stats> </rsp>';
+
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(data, "text/xml");
+    xmlDoc.documentElement.childNodes.forEach(node => {
+        // if (node.childNodes.length > 1) {
+        //     node.childNodes.forEach(childNode => {
+        //
+        //     })
+        // }
+        // else {
+        json[node.nodeName] = node.nodeValue;
+        //}
+    });
+
+    console.log("xml parsed:");
+    console.log(json);
+
+    return json;
+}
+
+XMLtoJSON("hello");
