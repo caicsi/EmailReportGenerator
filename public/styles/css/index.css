@@ -24,6 +24,7 @@ div#header h1#cc {
 
 div#drop-box {
   color: #fff;
+  vertical-align: middle;
 }
 
 div.alert {
