@@ -10,6 +10,7 @@ block content
         component("v-bind:is"="currentBox")
         input#file-input(type="file" multiple="")
     div#emails("v-bind:style"="{ display: showReports }")
+        a(href="/new") Try the new layout!
         div
             p Choose a date to view emails from that date.
             select("v-model"="currentDate")
@@ -24,6 +25,11 @@ block content
             div(class="email report")
                 table
                     tbody
+                        //tr(class="service")
+                            div(class="headers")
+                                th Service
+                            div(class="data")
+                                td {{ currentFormat }}
                         tr("v-for"="(value, key) in currentReport", "v-bind:key"="key")
                             div(class="headers")
                                 th {{ key }}
@@ -32,7 +38,7 @@ block content
                                 td("v-else-if"="isString(value)") {{ value }}
                                 td("v-else")
                                     div("v-for"="subValue in value")
-                                        p("v-for"="item in subValue") {{ item | formatItem }} &nbsp;
+                                        p("v-for"="item in subValue") {{ item | formatItem }}
 
 
     script(type="text/javascript" src="scripts/util/dropZone.js")

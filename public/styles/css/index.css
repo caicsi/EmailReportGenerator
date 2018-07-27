@@ -7,6 +7,10 @@ body {
   background-color: #d7e8ef;
 }
 
+h1 {
+  font-weight: 400;
+}
+
 div#header {
   padding: 1rem 2rem;
   background-color: #ffffff;
@@ -14,7 +18,7 @@ div#header {
 }
 
 div#header h1 {
-  font-size: 1em;
+  font-size: 18px;
 }
 
 div#header h1#cc {
@@ -99,6 +103,7 @@ th, td {
 
 th {
   width: 30%;
+  font-weight: 600;
 }
 
 td {
@@ -111,7 +116,7 @@ td div {
 
 td div p {
   padding: 6px;
-  margin: 0 0 0 0;
+  margin: 0 0 5px 5px;
   border: 1px solid #9fa7ad;
   border-radius: 10px;
   background-color: #edf7ff;
@@ -119,6 +124,10 @@ td div p {
 
 td#alertDate {
   color: #f7c400;
+}
+
+td.service {
+  color: #08a38b;
 }
 
 tr {

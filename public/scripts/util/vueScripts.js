@@ -67,6 +67,12 @@ let emailReport = new Vue({
                 return this.reports[this.currentDate].emails[this.currentCampaign].report;
             }
             return [];
+        },
+        currentFormat: function() {
+            if (this.currentDate !== null && this.currentCampaign !== null) {
+                return this.reports[this.currentDate].emails[this.currentCampaign].service;
+            }
+            return "Unknown";
         }
     },
     methods: {
@@ -109,27 +115,40 @@ emailReport.$watch('reports', function () {
     };
 });
 
-
-function generateReport(data) {
-
-    //make array of objects into one object
-    let content = {};
-    data.forEach(line => {
-        for (let key in line) {
-            content[key] = line[key];
-        }
-    });
-
-    //new data structure
+/*
+Pre: Takes in an Object of an email report and a string determining if the format is myEmma or Pardot
+Post: Adds email to Vue array of reports
+Purpose: To add the given email report to the list of reports in its proper date group format
+ */
+function generateReport(data, format) {
 
     let report = {};
+    let reportDate = null;
     let found = false;
-    report["name"] = content["Campaign"];
-    report["service"] = "myEmma";
-    report["report"] = content;
+
+    //if myemma
+    if (format === "MyEmma") {
+        report["name"] = data["Campaign"];
+        report["service"] = "myEmma";
+        report["report"] = data;
+
+        reportDate = new Date(data["Sent"]).toDateString();
+
+    //if pardot
+    } else if (format === "Pardot") {
+        report["name"] = data["Name"];
+        report["service"] = "Pardot";
+        report["report"] = data;
+
+        reportDate = new Date(data["Date / Time"]).toDateString();
+
+    } else {
+        console.log("Email report format not recognised. Cannot be added to stored list of reports.");
+        return;
+    }
 
     //check if there are other emails from this date
-    let reportDate = new Date(content["Sent"]).toDateString();
+
     emailReport.reports.forEach(dateGroup => {
         if (new Date(dateGroup["date"]).toDateString() === reportDate) {
             dateGroup["emails"].push(report);
@@ -140,13 +159,11 @@ function generateReport(data) {
     //if this is the first email for this date, create new entry
     if (!found) {
         let dateGroup = {};
-        dateGroup["date"] = content["Sent"];
+        dateGroup["date"] = data["Sent"];
         dateGroup["emails"] = [report];
         emailReport.reports.push(dateGroup);
     }
 
-    //console.log("reports (new data structure): ");
-    //console.log(emailReport.reports);
 }
 
 //check local storage for previous data
@@ -157,9 +174,9 @@ function checkForReport() {
         //check if past emails have been stored
         if(localStorage.getItem("emailGeneratorReports")) {
             //if so, load them into Vue vars
-            //localStorage.removeItem('emailGeneratorReports');
+            localStorage.removeItem('emailGeneratorReports');
 
-            emailReport.reports = JSON.parse(localStorage.getItem("emailGeneratorReports"));
+            //emailReport.reports = JSON.parse(localStorage.getItem("emailGeneratorReports"));
         }
 
     } else {
@@ -169,52 +186,3 @@ function checkForReport() {
 
 //run this function upon initialization to fetch data from local storage
 checkForReport();
-
-
-//maybe have json be a parameter
-function XMLtoJSON(data) {
-
-    let json = {};
-    let subJson = {};
-    let i = 0;
-    data = '<rsp stat="ok" version="1.0"> <stats> <sent>1003</sent> <delivered>543</delivered> <total_clicks>54</total_clicks> <unique_clicks>5</unique_clicks> <soft_bounced>3</soft_bounced> <hard_bounced>2</hard_bounced> <opt_outs>454</opt_outs> <spam_complaints>123</spam_complaints> <opens>34</opens> <unique_opens>...</unique_opens> <delivery_rate>...</delivery_rate> <opens_rate>100%</opens_rate> <click_through_rate>20%</click_through_rate> <unique_click_through_rate>...</unique_click_through_rate> <click_open_ratio>...</click_open_ratio> <opt_out_rate>34%</opt_out_rate> <spam_complaint_rate>0.0</spam_complaint_rate> </stats> </rsp>';
-
-    // let parser = new DOMParser();
-    // let xmlDoc = parser.parseFromString(data, "text/xml");
-    // xmlDoc.documentElement.childNodes.forEach(node => {
-    //     if (node.childNodes.length > 0) {
-    //         subJson = {};
-    //         for (i = 0; i < node.childNodes.length; i++) {
-    //             subJson[node.childNodes[i].nodeName] = node.childNodes.nodeValue;
-    //         }
-    //         // node.childNodes.forEach(childNode => {
-    //         //     subJson[childNode.nodeName] = childNode.nodeValue;
-    //         // });
-    //         json[node.nodeName] = subJson;
-    //     }
-    //     else {
-    //         json[node.nodeName] = node.nodeValue;
-    //     }
-    // });
-    //
-    // console.log(xmlDoc);
-    // console.log("xml parsed:");
-    // console.log(json);
-
-    let json2 = {};
-
-    let stats = xmlDoc.getElementsByTagName("stats");
-    console.log(stats);
-    console.log(stats[0]);
-    console.log(stats[0].childElementCount);
-    stats[0].childNodes.forEach(node => {
-        json2[node.nodeName] = node.textContent;
-    });
-
-    console.log("xml take two:");
-    console.log(json2);
-
-    //return json;
-}
-
-XMLtoJSON("hello");
