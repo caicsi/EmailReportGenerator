@@ -123,7 +123,8 @@ Purpose: To add the given email report to the list of reports in its proper date
 function generateReport(data, format) {
 
     let report = {};
-    let reportDate = null;
+    //set reportDate to the current date. will be changed if myEmma
+    let reportDate = new Date().toDateString();
     let found = false;
 
     //if myemma
@@ -132,15 +133,15 @@ function generateReport(data, format) {
         report["service"] = "myEmma";
         report["report"] = data;
 
+        //set reportDate to the date in the report, instead of the current date
         reportDate = new Date(data["Sent"]).toDateString();
 
     //if pardot
     } else if (format === "Pardot") {
-        report["name"] = data["Name"];
+        console.log(data);
+        report["name"] = data["Email List Info"]["Name"];
         report["service"] = "Pardot";
         report["report"] = data;
-
-        reportDate = new Date(data["Date / Time"]).toDateString();
 
     } else {
         console.log("Email report format not recognised. Cannot be added to stored list of reports.");
@@ -159,7 +160,7 @@ function generateReport(data, format) {
     //if this is the first email for this date, create new entry
     if (!found) {
         let dateGroup = {};
-        dateGroup["date"] = data["Sent"];
+        dateGroup["date"] = reportDate;
         dateGroup["emails"] = [report];
         emailReport.reports.push(dateGroup);
     }
