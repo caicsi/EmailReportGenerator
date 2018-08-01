@@ -37,12 +37,15 @@ block content
                                 td#alertDate("v-if"="key === 'Sent'") {{ value }}
                                 td("v-else-if"="isString(value)") {{ value }}
                                 td("v-else")
-                                    div("v-for"="subValue in value")
-                                        p("v-for"="item in subValue") {{ item | formatItem }}
+                                    div("v-for"="(subValue, subKey) in value")
+                                        p {{ subKey }}
+                                        p("v-if"="isString(subValue)") {{ subValue }}
+                                        p("v-else" "v-for"="item in subValue") {{ item | formatItem }}
 
 
     script(type="text/javascript" src="scripts/util/dropZone.js")
     script(type="text/javascript" src="scripts/util/CSVParser.js")
+    script(type="text/javascript" src="scripts/util/PardotAPI.js")
     script(type="text/javascript" src="scripts/index.js")
     script(type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js")
     script(type="text/javascript" src="scripts/util/vueScripts.js")

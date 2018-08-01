@@ -66,13 +66,9 @@ function CSVtoJSON(lines, headers) {
     lines.filter(line => line.length > 1)
         .slice(1) //remove the headers
         .forEach(line => {
-            //console.log("line" + line);
-            //line = line.split(',');
-            //console.log(line);
+
             if (line[0] !== "") {
                 //loop through columns
-                //console.log(line);
-                //having a weird bug where the first obj values are "getter and setter" ???
                 json = {};
                 for (j = 0; j < headers.length; j++) {
                     json[headers[j]] = line[j];
@@ -94,10 +90,11 @@ function OverviewCSVtoJSON(lines) {
 
     let json = {};
     let subJson = {};
+    let arrVal = [];
+    let j = 0;
 
     //loop through entries
     for (let i = 0; i < lines.length; i++) {
-        //entry = {};
 
         //remove colons that are at the end of the string
         for(let k = 0; k < lines[i].length; k++) {
@@ -111,13 +108,15 @@ function OverviewCSVtoJSON(lines) {
         if ((lines[i].length === 1 && lines[i][0].length > 2) || (lines[i][0].length > 1 && lines[i][1] === "")) {
 
             subJson = {};
-            let j = i + 1;
 
-            for (; j < lines.length; j++) {
+            for (j = i + 1; j < lines.length; j++) {
                 if (lines[j][0].length < 3){
                     break;
                 }
-                subJson[j - (i + 1)] = lines[j];
+                //subJson[j - (i + 1)] = lines[j];
+                subJson[lines[j][0]] = Array(lines[j].length - 1).fill("").map(
+                    (value, index) => lines[j][index + 1]
+                );
                 lines[j] = "";
             }
 
@@ -127,7 +126,6 @@ function OverviewCSVtoJSON(lines) {
 
         //otherwise, proceed to make json entry as normal
         else if (lines[i].length > 1) {
-
             json[lines[i][0]] = lines[i][1];
 
         }
@@ -181,8 +179,8 @@ function XMLtoJSON(data) {
         delete json["#text"];
     }
 
-    console.log("xml test:");
-    console.log(json);
+    //console.log("xml test:");
+    //console.log(json);
 
     return json;
 }
@@ -197,7 +195,8 @@ function getPardotEmails(data) {
                 return new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
                     //needs user_key and api_key still, to be sent
-                    xhr.open('POST', 'https://pi.pardot.com/api/email/version/4/do/stats/id/' + line["Email Id"] + "?");
+
+                    xhr.open('POST', getURL(line["Email Id"]));
                     xhr.onload = () => resolve(xhr.responseText);
                     xhr.onerror = () => reject(xhr.statusText);
                     xhr.send();
@@ -210,6 +209,7 @@ function getPardotEmails(data) {
         }
         return [values];
     }).catch(function(values) {
+        console.log(values);
         console.log("error");
         return "error";
     });
@@ -220,6 +220,7 @@ function getPardotEmails(data) {
 //receives data and metadata after CSV file was parsed.
 function processData(data, metadata) {
     //console.log(metadata);
+    console.log("data");
     console.log(data);
 
     //determine if myEmma or Pardot
@@ -236,7 +237,9 @@ function processData(data, metadata) {
 
             //just for testing, because the API will not work no matter what rn
             let jsonReport = XMLtoJSON("hi");
+            //console.log(data[0]);
             jsonReport["Email List Info"] = data[0];
+            //console.log(jsonReport);
             generateReport(jsonReport, "Pardot");
 
         //API was successful, loop through responses
@@ -247,7 +250,7 @@ function processData(data, metadata) {
             for (let i = 0; i < xmlResponse.length; i++) {
                 jsonReport = XMLtoJSON(xmlResponse[i]);
                 jsonReport["Email List Info"] = data[i];
-                generateReport(jsonReport, "Pardot")
+                generateReport(jsonReport, "Pardot");
             }
         }
 
