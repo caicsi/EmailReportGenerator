@@ -196,10 +196,13 @@ function getPardotEmails(data) {
                     const xhr = new XMLHttpRequest();
                     //needs user_key and api_key still, to be sent
 
-                    xhr.open('POST', getURL(line["Email Id"]));
-                    xhr.onload = () => resolve(xhr.responseText);
-                    xhr.onerror = () => reject(xhr.statusText);
-                    xhr.send();
+                    let url = getURL(line["Email Id"]);
+                    if (!url.includes("Error")) {
+                        xhr.open('POST', url);
+                        xhr.onload = () => resolve(xhr.responseText);
+                        xhr.onerror = () => reject(xhr.statusText);
+                        xhr.send();
+                    }
                 });
         })
     ).then(function(values) {

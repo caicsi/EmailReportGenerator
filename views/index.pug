@@ -9,38 +9,41 @@ block content
     div#drop-box(v-bind:style="styling")
         component("v-bind:is"="currentBox")
         input#file-input(type="file" multiple="")
-    div#emails("v-bind:style"="{ display: showReports }")
-        a(href="/new") Try the new layout!
-        div
-            p Choose a date to view emails from that date.
-            select("v-model"="currentDate")
-                option("v-for"="(entry, index) in reports", v-bind:value="index") {{ entry.date }}
-            //span {{ index }}
-        div(class="alert", "v-if"="needsUpdating")
-            img(src="../images/caution.jpg", alt="caution symbol", width="20px", height="20px")
-            p The data for these emails needs to be updated.
-        div#reports
-            div(class="email buttons")
-                button("v-for"="(campaign, index) in emailsPerDate", "v-bind:key"="index", "v-bind:class"="['email-button', { active: currentCampaign === index }]", "v-on:click"="currentCampaign = index") {{ campaign.name }}
-            div(class="email report")
-                table
-                    tbody
-                        //tr(class="service")
-                            div(class="headers")
-                                th Service
-                            div(class="data")
-                                td {{ currentFormat }}
-                        tr("v-for"="(value, key) in currentReport", "v-bind:key"="key")
-                            div(class="headers")
-                                th {{ key }}
-                            div(class="data")
-                                td#alertDate("v-if"="key === 'Sent'") {{ value }}
-                                td("v-else-if"="isString(value)") {{ value }}
-                                td("v-else")
-                                    div("v-for"="(subValue, subKey) in value")
-                                        p {{ subKey }}
-                                        p("v-if"="isString(subValue)") {{ subValue }}
-                                        p("v-else" "v-for"="item in subValue") {{ item | formatItem }}
+    div#emails
+        div#nav-left
+            div#nav-top
+                div
+                    p Choose a date to view emails from that date.
+                    select("v-model"="currentDate")
+                        option("v-for"="(entry, index) in reports", v-bind:value="index") {{ entry.date }}
+                    //span {{ index }}
+                div(class="alert", "v-if"="needsUpdating")
+                    img(src="../images/caution.jpg", alt="caution symbol", width="20px", height="20px")
+                    p The data for these emails needs to be updated.
+            div.border
+                div(class="email buttons")
+                    button("v-for"="(campaign, index) in emailsPerDate", "v-bind:key"="index", "v-bind:class"="['email-button', { active: currentCampaign === index }]", "v-on:click"="currentCampaign = index") {{ campaign.name }}
+        div.border("v-bind:style"="{ display: showReports }")
+            div#reports
+                div(class="email report")
+                    table
+                        tbody
+                            //tr(class="service")
+                                div(class="headers")
+                                    th Service
+                                div(class="data")
+                                    td {{ currentFormat }}
+                            tr("v-for"="(value, key) in currentReport", "v-bind:key"="key")
+                                div(class="headers")
+                                    th {{ key }}
+                                div(class="data")
+                                    td#alertDate("v-if"="key === 'Sent'") {{ value }}
+                                    td("v-else-if"="isString(value)") {{ value }}
+                                    td("v-else")
+                                        div("v-for"="(subValue, subKey) in value")
+                                            p {{ subKey }}
+                                            p("v-if"="isString(subValue)") {{ subValue }}
+                                            p("v-else" "v-for"="item in subValue") {{ item | formatItem }}
 
 
     script(type="text/javascript" src="scripts/util/dropZone.js")

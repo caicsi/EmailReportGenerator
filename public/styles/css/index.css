@@ -1,36 +1,44 @@
+/* line 1, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 html {
   font-family: 'Catamaran', sans-serif;
 }
 
+/* line 4, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 body {
   margin: 0;
   background-color: #d7e8ef;
 }
 
+/* line 8, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 h1 {
   font-weight: 400;
 }
 
+/* line 11, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div#header {
   padding: 1rem 2rem;
   background-color: #ffffff;
   box-shadow: 0 0 2px 0 gray;
 }
 
+/* line 15, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div#header h1 {
   font-size: 18px;
 }
 
+/* line 17, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div#header h1#cc {
   position: absolute;
   right: 2rem;
 }
 
+/* line 21, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div#drop-box {
   color: #fff;
   vertical-align: middle;
 }
 
+/* line 25, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div.alert {
   color: #f7c400;
   display: inline-flex;
@@ -39,53 +47,82 @@ div.alert {
   margin-bottom: 1rem;
 }
 
+/* line 31, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div.alert p {
   margin: 3px;
 }
 
-div#emails {
-  margin: 1rem;
-  padding: 1rem;
-  background-color: #ffffff;
+/* line 34, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
+div#nav-left {
+  display: inline-block;
+  width: 15rem;
+  min-width: 15rem;
+  text-align: center;
+  margin-right: 2%;
 }
 
+/* line 41, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
+div#nav-top {
+  background-color: #ffffff;
+  padding: 5px;
+}
+
+/* line 45, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
+div.border {
+  padding: 1rem;
+  background-color: #0e76a3;
+}
+
+/* line 49, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
+div#emails {
+  padding: 1rem;
+  display: flex;
+}
+
+/* line 54, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div#emails select {
   margin-bottom: 1rem;
 }
 
+/* line 63, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div#reports {
   display: flex;
+  background-color: #ffffff;
 }
 
+/* line 67, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div.buttons {
   text-align: center;
-  border-top: 1px solid #9fa7ad;
 }
 
+/* line 71, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div.buttons button {
   padding: 1rem;
   display: block;
   border-style: solid;
   border-color: gray;
-  border-width: 0 0 1px 1px;
-  width: 10rem;
+  border-width: 1px;
   font-size: 12px;
 }
 
+/* line 79, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div.buttons button:hover {
-  background-color: #0e76a3;
-  color: #ffffff;
+  background-color: #d7e8ef;
+  color: #0d2b56;
 }
 
+/* line 82, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div.buttons button.active {
-  background-color: #0d56a2;
-  color: #ffffff;
+  background-color: #9fa7ad;
+  color: #0d2b56;
 }
 
+/* line 85, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div.buttons button:focus {
   outline: 0;
 }
 
+/* line 88, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 div.report {
   display: flex;
   flex-flow: column;
@@ -94,6 +131,7 @@ div.report {
   box-sizing: border-box;
 }
 
+/* line 98, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 th, td {
   display: block;
   padding: 3px;
@@ -101,19 +139,23 @@ th, td {
   vertical-align: top;
 }
 
+/* line 104, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 th {
   width: 30%;
   font-weight: 600;
 }
 
+/* line 108, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 td {
   max-width: 69%;
 }
 
+/* line 110, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 td div {
   display: flex;
 }
 
+/* line 112, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 td div p {
   padding: 6px;
   margin: 0 0 5px 5px;
@@ -122,15 +164,20 @@ td div p {
   background-color: #edf7ff;
 }
 
+/* line 120, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 td#alertDate {
   color: #f7c400;
 }
 
+/* line 123, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 td.service {
   color: #08a38b;
 }
 
+/* line 126, /Users/workstudy/Documents/EmailReportGenerator/public/styles/sass/index.sass */
 tr {
   display: flex;
   border-bottom: 1px solid #9fa7ad;
 }
+
+/*# sourceMappingURL=../css/index.map */
