@@ -3,7 +3,7 @@ html
 
 body
   margin: 0
-  background-color: #d7e8ef
+  background-color: #d2d1ce
 
 h1
   font-weight: 400
@@ -23,13 +23,21 @@ div#drop-box
   vertical-align: middle
 
 div.alert
-  color: #f7c400
+  color: #f9ac07
   display: inline-flex
   align-items: center
   padding: 3px
   margin-bottom: 1rem
+  line-height: 95%
+  border: 1px solid #f9ac07
+  //background-color: #f9ac07
   p
-    margin: 3px
+    margin: 3px 3px 3px 0
+  img
+    margin: 0 -6px 0 10px
+
+td#alertDate
+  color: #f9ac07
 
 div#nav-left
   display: inline-block
@@ -47,9 +55,7 @@ div.border
   background-color: #0e76a3
 
 div#emails
-  //margin: 1rem
   padding: 1rem
-  //background-color: #ffffff
   display: flex
   select
     margin-bottom: 1rem
@@ -66,8 +72,6 @@ div#reports
 
 div.buttons
   text-align: center
-  //margin-left: 12%
-  //border-top: 1px solid #9fa7ad
   button
     padding: 1rem
     display: block
@@ -76,14 +80,26 @@ div.buttons
     border-width: 1px
     //width: 10rem
     font-size: 12px
+    background-color: #ffffff
     &:hover
-      background-color: #d7e8ef
+      background-color: #eaebef
       color: #0d2b56
     &.active
-      background-color: #9fa7ad
-      color: #0d2b56
+      background-color: #eaebef
+      color: #0e76a3
     &:focus
       outline: 0
+
+div.selectButtons
+  display: flex
+
+//help with code from: https://stackoverflow.com/questions/12483178/how-can-i-make-a-triangle-in-html
+div.selectedTriangle
+  width: 0
+  height: 0
+  border: solid 15px
+  border-color: transparent transparent transparent #f99907
+  margin: 8% -30px 0 0
 
 div.report
   display: flex
@@ -91,9 +107,6 @@ div.report
   border: 1px solid gray
   width: 100%
   box-sizing: border-box
-
-//table
-  background-color: #e0eef9
 
 th, td
   display: block
@@ -115,10 +128,6 @@ td
       border: 1px solid #9fa7ad
       border-radius: 10px
       background-color: #edf7ff
-      //margin-left: 3px
-
-td#alertDate
-  color: #f7c400
 
 td.service
   color: #08a38b

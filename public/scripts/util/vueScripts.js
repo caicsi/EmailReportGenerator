@@ -97,9 +97,13 @@ let emailReport = new Vue({
 
                 localStorage.setItem('emailGeneratorReports', JSON.stringify(this.reports));
 
-                this.showReports = "block";
+                //this.showReports = "block";
             },
             deep: true
+        },
+        currentCampaign: function (newValue, oldValue) {
+            if (newValue != null) this.showReports = "block";
+            else this.showReports = "none";
         }
     }
 });

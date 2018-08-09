@@ -22,7 +22,9 @@ block content
                     p The data for these emails needs to be updated.
             div.border
                 div(class="email buttons")
-                    button("v-for"="(campaign, index) in emailsPerDate", "v-bind:key"="index", "v-bind:class"="['email-button', { active: currentCampaign === index }]", "v-on:click"="currentCampaign = index") {{ campaign.name }}
+                    div(class="selectButtons", "v-for"="(campaign, index) in emailsPerDate", "v-bind:key"="index")
+                        button("v-bind:class"="['email-button', { active: currentCampaign === index }]", "v-on:click"="currentCampaign = index") {{ campaign.name }}
+                        div("v-if"="currentCampaign === index" "class"="selectedTriangle")
         div.border("v-bind:style"="{ display: showReports }")
             div#reports
                 div(class="email report")

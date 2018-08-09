@@ -189,6 +189,9 @@ function XMLtoJSON(data) {
 //returns an array of XML if successful, error message or undefined if not.
 function getPardotEmails(data) {
 
+    let apiKey = getAPIkey();
+    if (apiKey === "error") return "Error retrieving API key";
+
     Promise.all(
         data.filter(line => line["Email Id"] !== undefined && line["Email Id"] !== "")
             .map(line => {
