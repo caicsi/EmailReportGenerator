@@ -189,8 +189,12 @@ function XMLtoJSON(data) {
 //returns an array of XML if successful, error message or undefined if not.
 function getPardotEmails(data) {
 
+    console.log();
+
     let apiKey = getAPIkey();
-    if (apiKey === "error") return "Error retrieving API key";
+    if (apiKey === "error" || apiKey === undefined) {
+        return "error";
+    }
 
     Promise.all(
         data.filter(line => line["Email Id"] !== undefined && line["Email Id"] !== "")
@@ -226,8 +230,8 @@ function getPardotEmails(data) {
 //receives data and metadata after CSV file was parsed.
 function processData(data, metadata) {
     //console.log(metadata);
-    console.log("data");
-    console.log(data);
+    //console.log("data");
+    //console.log(data);
 
     //determine if myEmma or Pardot
     //Pardot can have multiple emails in one sheet
@@ -243,9 +247,7 @@ function processData(data, metadata) {
 
             //just for testing, because the API will not work no matter what rn
             let jsonReport = XMLtoJSON("hi");
-            //console.log(data[0]);
             jsonReport["Email List Info"] = data[0];
-            //console.log(jsonReport);
             generateReport(jsonReport, "Pardot");
 
         //API was successful, loop through responses

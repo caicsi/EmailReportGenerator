@@ -44,6 +44,7 @@ let headerDiv = new Vue({
 let emailReport = new Vue({
     el: '#emails',
     data: {
+        showEmails: "none",
         showReports: "none",
         reports: [],
         currentCampaign: null,
@@ -97,7 +98,7 @@ let emailReport = new Vue({
 
                 localStorage.setItem('emailGeneratorReports', JSON.stringify(this.reports));
 
-                //this.showReports = "block";
+                this.showEmails = "flex";
             },
             deep: true
         },

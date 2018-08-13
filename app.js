@@ -38,4 +38,40 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+//a router to load a URL
+// app.get('/load', loadURL);
+// function loadURL(req, res)
+
+require('dotenv').load();
+console.log(process.env.FOO);
+function getAPIkey() {
+
+    const pardotAuth = {
+        user_key : process.env.PARDOT_USER_KEY,
+        password : process.env.PARDOT_PASSWORD,
+        email : process.env.PARDOT_EMAIL
+    };
+
+    let url = "https://pi.pardot.com/api/login/version/3?user_key="
+        + pardotAuth.user_key + "&email=" + pardotAuth.email + "&password=" + pardotAuth.password;
+
+    console.log(url);
+
+    let request = require("request");
+    request(url, loaded);
+
+    // Callback for when the request is complete
+    function loaded(error, response, body) {
+        // Check for errors
+        if (!error && response.statusCode === 200) {
+            // The raw HTML is in body
+            return body;
+        } else {
+            return body;
+        }
+    }
+}
+
+console.log(getAPIkey());
+
 module.exports = app;
